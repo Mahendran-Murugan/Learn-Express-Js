@@ -2,6 +2,8 @@ import express from 'express';
 
 const app = express();
 
+app.use(express.json());
+
 const PORT = process.env.PORT || 3000;
 
 const mockUsers = [{ id: 1, username: "mahi", displayname: "Mahendran" }, { id: 2, username: "kumi", displayname: "Mahendran" }, { id: 3, username: "kai", displayname: "Mahendran" }, { id: 4, username: "pant", displayname: "Mahendran" }];
@@ -12,6 +14,14 @@ app.get('/', (req, res) => {
 
 app.get('/api/products', (req, res) => {
     res.send([{ id: 1, username: "mahi", displayname: "Mahendran" }, { id: 2, username: "kumi", displayname: "Mahendran" }, { id: 3, username: "kai", displayname: "Mahendran" }, { id: 4, username: "pant", displayname: "Mahendran" }])
+})
+
+app.post('/api/users', (req, res) => {
+    console.log(req.body);
+    const { body } = req;
+    const newUser = { id: mockUsers[mockUsers.length - 1].id + 1, username: body.username, displayname: body.displayname }
+    mockUsers.push(newUser);
+    res.sendStatus(200);
 })
 
 app.get('/api/users', (req, res) => {
