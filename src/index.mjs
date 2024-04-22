@@ -17,12 +17,12 @@ app.get('/api/products', (req, res) => {
 app.get('/api/users', (req, res) => {
     console.log(req.query);
     const { query: { filter, value } } = req;
-    if (!filter && !value) return res.send(mockUsers);
     if (filter && value) return res.send(
         mockUsers.filter((user) => {
             return user[filter].includes(value)
         })
     );
+    return res.send(mockUsers);
     // //not work
     // if (filter && value) return res.send(
     //     mockUsers.filter((user) => {
