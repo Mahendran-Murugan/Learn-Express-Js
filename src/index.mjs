@@ -59,3 +59,16 @@ app.put("/api/users/:id", (req, res) => {
     mockUsers[findUserIndex] = { id: parsedId, ...body }
     return res.sendStatus(200);
 })
+
+app.patch('/api/users/:id', (req, res) => {
+    const { body, params: { id } } = req;
+    const parsedId = parseInt(id);
+    if (isNaN(parsedId)) return res.sendStatus(404);
+    const findUserIndex = mockUsers.findIndex((user) => {
+        return user.id === parsedId;
+    })
+    console.log(findUserIndex);
+    if (findUserIndex === -1) return res.sendStatus(404);
+    mockUsers[findUserIndex] = { ...mockUsers[findUserIndex], ...body }
+    return res.sendStatus(200);
+})
