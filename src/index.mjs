@@ -4,6 +4,8 @@ const app = express();
 
 app.use(express.json());
 
+app.use(cors({ origin: "*" }))
+
 const PORT = process.env.PORT || 3000;
 
 const mockUsers = [{ id: 1, username: "mahi", displayname: "Mahendran" }, { id: 2, username: "kumi", displayname: "Mahendran" }, { id: 3, username: "kai", displayname: "Mahendran" }, { id: 4, username: "pant", displayname: "Mahendran" }];
