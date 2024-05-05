@@ -1,6 +1,8 @@
 import express from 'express';
 import dotenv from 'dotenv';
-import cors from 'cors'
+import cors from 'cors';
+import { query, validationResult, body, matchedData, checkSchema } from 'express-validator'
+import { createUserSchema } from './utils/createUserSchema.mjs'
 
 dotenv.config();
 
@@ -54,16 +56,22 @@ app.get('/api/products', middleWare, (req, res) => {
     res.send([{ id: 1, username: "mahi", displayname: "Mahendran" }, { id: 2, username: "kumi", displayname: "Mahendran" }, { id: 3, username: "kai", displayname: "Mahendran" }, { id: 4, username: "pant", displayname: "Mahendran" }])
 })
 
-app.post('/api/users', (req, res) => {
-    console.log(req.body);
-    const { body } = req;
-    const newUser = { id: mockUsers[mockUsers.length - 1].id + 1, username: body.username, displayname: body.displayname }
-    mockUsers.push(newUser);
-    res.sendStatus(200);
-})
+app.post('/api/users',
+    // body("username").notEmpty().withMessage("Username Can't be null").isString().withMessage("Username can't be numerics"),
+    checkSchema(createUserSchema),
+    (req, res) => {
+        const result = validationResult(req);
+        console.log(result);
+        if (!result.isEmpty()) return res.status(400).send({ errors: result.array() });
+        const data = matchedData(req);
+        const newUser = { id: mockUsers[mockUsers.length - 1].id + 1, ...data }
+        mockUsers.push(newUser);
+        res.status(200).send(newUser);
+    })
 
-app.get('/api/users', (req, res) => {
-    console.log(req.query);
+app.get('/api/users', query('filter').isString().notEmpty().isLength({ min: 1, max: 10 }).withMessage("Messeage should be in range of 1 to 10"), (req, res) => {
+    const result = validationResult(req);
+    console.log(result);
     const { query: { filter, value } } = req;
     if (filter && value) return res.send(
         mockUsers.filter((user) => {
