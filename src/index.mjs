@@ -13,10 +13,10 @@ app.use(express.json());
 
 app.use(cors({ origin: "*" }));
 
-app.use(router);
+app.use('/api', router);
 
 app.listen(PORT, () => {
-    console.log(`Server is Running at ${PORT}`)
+    console.log(`Server is Running at http://localhost:${PORT}`)
 })
 
 app.get('/', (req, res, next) => {

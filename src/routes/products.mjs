@@ -3,7 +3,7 @@ import { middleWare } from '../utils/middlewares.mjs'
 
 const router = Router();
 
-router.get('/api/products', middleWare, (req, res) => {
+router.get('/', middleWare, (req, res) => {
     res.send(
         [
             { id: 1, username: "mahi", displayname: "Mahendran" },

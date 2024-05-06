@@ -4,8 +4,8 @@ import productRouter from './products.mjs'
 
 const router = Router();
 
-router.use(userRouter);
+router.use('/users', userRouter);
 
-router.use(productRouter);
+router.use('/products', productRouter);
 
 export default router;

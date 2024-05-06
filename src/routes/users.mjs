@@ -6,7 +6,7 @@ import { resolveIndexByUserId } from '../utils/middlewares.mjs'
 
 const router = Router();
 
-router.post('/api/users',
+router.post('/',
     checkSchema(createUserSchema),
     (req, res) => {
         const result = validationResult(req);
@@ -19,7 +19,7 @@ router.post('/api/users',
     }
 )
 
-router.get('/api/users', query('filter').isString().notEmpty().isLength({ min: 1, max: 10 }).withMessage("Messeage should be in range of 1 to 10"), (req, res) => {
+router.get('/', query('filter').isString().notEmpty().isLength({ min: 1, max: 10 }).withMessage("Messeage should be in range of 1 to 10"), (req, res) => {
     const result = validationResult(req);
     console.log(result);
     const { query: { filter, value } } = req;
@@ -37,24 +37,24 @@ router.get('/api/users', query('filter').isString().notEmpty().isLength({ min: 1
     // );
 })
 
-router.get('/api/users/:id', resolveIndexByUserId, (req, res) => {
+router.get('/:id', resolveIndexByUserId, (req, res) => {
     const { findUserIndex } = req;
     return res.send(mockUsers[findUserIndex]);
 });
 
-router.put("/api/users/:id", resolveIndexByUserId, (req, res) => {
+router.put("/:id", resolveIndexByUserId, (req, res) => {
     const { body, findUserIndex, id } = req;
     mockUsers[findUserIndex] = { id: id, ...body }
     return res.sendStatus(200);
 })
 
-router.patch('/api/users/:id', resolveIndexByUserId, (req, res) => {
+router.patch('/:id', resolveIndexByUserId, (req, res) => {
     const { body, findUserIndex } = req;
     mockUsers[findUserIndex] = { ...mockUsers[findUserIndex], ...body }
     return res.sendStatus(200);
 })
 
-router.delete('/api/users/:id', resolveIndexByUserId, (req, res) => {
+router.delete('/:id', resolveIndexByUserId, (req, res) => {
     mockUsers.splice(req.findUserIndex, 1);
     return res.sendStatus(200);
 })
