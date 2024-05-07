@@ -2,6 +2,7 @@ import express from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
 import router from './routes/index.mjs'
+import cookieParser from 'cookie-parser'
 
 dotenv.config();
 
@@ -13,6 +14,8 @@ app.use(express.json());
 
 app.use(cors({ origin: "*" }));
 
+app.use(cookieParser("hello"));
+
 app.use('/api', router);
 
 app.listen(PORT, () => {
@@ -23,6 +26,9 @@ app.get('/', (req, res, next) => {
     console.log("Base Middleware");
     next();
 }, (req, res) => {
+    res.cookie('hello', 'user',
+        { maxAge: 10000, signed: true }
+    )
     res.status(201).send(
         { msg: "Hello" }
     );
