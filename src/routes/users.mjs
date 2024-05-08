@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import { checkSchema, validationResult, matchedData, query } from 'express-validator'
+import { checkSchema, validationResult, matchedData, query, cookie } from 'express-validator'
 import { createUserSchema } from '../utils/createUserSchema.mjs'
 import { mockUsers } from '../utils/constants.mjs'
 import { resolveIndexByUserId } from '../utils/middlewares.mjs'
@@ -20,6 +20,15 @@ router.post('/',
 )
 
 router.get('/', query('filter').isString().notEmpty().isLength({ min: 1, max: 10 }).withMessage("Messeage should be in range of 1 to 10"), (req, res) => {
+    console.log(req.session);
+    console.log(req.session.id);
+    req.sessionStore.get(req.session.id, (err, data) => {
+        if (err) {
+            console.log(err);
+        } else {
+            console.log(data);
+        }
+    })
     const result = validationResult(req);
     console.log(result);
     const { query: { filter, value } } = req;
