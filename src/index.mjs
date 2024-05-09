@@ -4,6 +4,7 @@ import cors from 'cors';
 import router from './routes/index.mjs'
 import cookieParser from 'cookie-parser'
 import session from 'express-session'
+import { mockUsers } from './utils/constants.mjs'
 
 dotenv.config();
 
@@ -46,3 +47,23 @@ app.get('/', (req, res, next) => {
         { msg: "Hello" }
     );
 });
+
+
+app.post('/api/auth', (req, res) => {
+    const {
+        body: { username, password }
+    } = req;
+
+    const findUser = mockUsers.find(user => user.username === username);
+
+    if (!findUser || findUser.password !== password) return res.status(401).send({ error: "Error in Credentials" });
+
+    req.session.user = findUser;
+
+    res.status(200).send(findUser);
+})
+
+
+app.get('/api/auth/status', (req, res) => {
+    return req.session.user ? res.status(200).send({ "status": req.session.user }) : res.status(400).send({ status: "Not Authorized" })
+})
