@@ -20,4 +20,22 @@ router.get('/', middleWare, (req, res) => {
         res.status(404).send({ message: "You don't have the cookies" })
 })
 
+router.post('/cart', (req, res) => {
+    if (!req.session.user) return res.sendStatus(401);
+    const { body: { item }, session: { cart } } = req;
+    if (cart) {
+        cart.push(item)
+    }
+    else {
+        req.session.cart = [item];
+    }
+    return res.status(201).send({ item: item });
+})
+
+router.get('/cart', (req, res) => {
+    if (!req.session.user) return res.sendStatus(401);
+    const { session: { cart } } = req;
+    return res.status(201).send({ item: cart });
+})
+
 export default router;
