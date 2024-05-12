@@ -4,6 +4,7 @@ import cors from 'cors';
 import router from './routes/index.mjs'
 import cookieParser from 'cookie-parser'
 import session from 'express-session'
+import passport from 'passport';
 
 dotenv.config();
 
@@ -24,7 +25,11 @@ app.use(session({
     cookie: {
         maxAge: 60000 * 60,
     },
-}))
+}));
+
+app.use(passport.initialize());
+
+app.use(passport.session());
 
 app.use('/api', router);
 
