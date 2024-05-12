@@ -3,21 +3,35 @@ import { checkSchema, validationResult, matchedData, query, cookie } from 'expre
 import { createUserSchema } from '../utils/createUserSchema.mjs'
 import { mockUsers } from '../utils/constants.mjs'
 import { resolveIndexByUserId } from '../utils/middlewares.mjs'
+import { User } from '../mongoose/shema/user.mjs'
 
 const router = Router();
 
-router.post('/',
-    checkSchema(createUserSchema),
-    (req, res) => {
-        const result = validationResult(req);
-        console.log(result);
-        if (!result.isEmpty()) return res.status(400).send({ errors: result.array() });
-        const data = matchedData(req);
-        const newUser = { id: mockUsers[mockUsers.length - 1].id + 1, ...data }
-        mockUsers.push(newUser);
-        res.status(200).send(newUser);
+// router.post('/',
+//     checkSchema(createUserSchema),
+//     (req, res) => {
+//         const result = validationResult(req);
+//         console.log(result);
+//         if (!result.isEmpty()) return res.status(400).send({ errors: result.array() });
+//         const data = matchedData(req);
+//         const newUser = { id: mockUsers[mockUsers.length - 1].id + 1, ...data }
+//         mockUsers.push(newUser);
+//         res.status(200).send(newUser);
+//     }
+// )
+
+router.post('/', async (req, res) => {
+    const { body } = req;
+    if (!body) return res.sendStatus(401);
+    const newUser = new User(body);
+    try {
+        const savedUser = await newUser.save();
+        return res.status(201).send(savedUser);
+    } catch (e) {
+        console.log(e);
+        return res.sendStatus(401);
     }
-)
+})
 
 router.get('/', query('filter').isString().notEmpty().isLength({ min: 1, max: 10 }).withMessage("Messeage should be in range of 1 to 10"), (req, res) => {
     console.log(req.session);

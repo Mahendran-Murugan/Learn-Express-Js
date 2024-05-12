@@ -5,12 +5,17 @@ import router from './routes/index.mjs'
 import cookieParser from 'cookie-parser'
 import session from 'express-session'
 import passport from 'passport';
+import mongoose from 'mongoose';
 
 dotenv.config();
 
 const PORT = process.env.PORT || 7000;
 
 const app = express();
+
+mongoose.connect('mongodb://localhost:27017/express')
+    .then(() => console.log("MongoDB Connected Sucessfully"))
+    .catch(() => console.log("MongoDB Connection Failed"))
 
 app.use(express.json());
 
