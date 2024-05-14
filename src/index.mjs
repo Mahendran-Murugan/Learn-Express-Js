@@ -15,7 +15,7 @@ const app = express();
 
 mongoose.connect('mongodb://localhost:27017/express')
     .then(() => console.log("MongoDB Connected Sucessfully"))
-    .catch(() => console.log("MongoDB Connection Failed"))
+    .catch((e) => console.log("MongoDB Connection Failed " + e))
 
 app.use(express.json());
 
