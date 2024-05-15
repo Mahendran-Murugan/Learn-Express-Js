@@ -4,6 +4,7 @@ import { createUserSchema } from '../utils/createUserSchema.mjs'
 import { mockUsers } from '../utils/constants.mjs'
 import { resolveIndexByUserId } from '../utils/middlewares.mjs'
 import { User } from '../mongoose/shema/user.mjs'
+import { hashPassword } from '../utils/helper.mjs'
 
 const router = Router();
 
@@ -25,7 +26,12 @@ router.post('/', checkSchema(createUserSchema), async (req, res) => {
     if (!result.isEmpty()) return res.status(401).send({ error: result.array() });
     const data = matchedData(req);
     console.log(data);
-    const newUser = new User(data);
+    const password = hashPassword(data.password);
+    const newUser = new User({
+        username: data.username,
+        displayName: data.displayName,
+        password: password,
+    });
     try {
         const savedUser = await newUser.save();
         return res.status(201).send(savedUser);

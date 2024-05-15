@@ -2,6 +2,7 @@ import passport from "passport";
 import { Strategy } from 'passport-local'
 import { mockUsers } from "../utils/constants.mjs";
 import { User } from "../mongoose/shema/user.mjs";
+import { comparePassword } from "../utils/helper.mjs";
 
 passport.serializeUser((user, done) => {
     console.log("Inside Serialize User");
@@ -25,7 +26,7 @@ passport.use(
         try {
             const findUser = await User.findOne({ username: username });
             if (!findUser) throw new Error("User not Found")
-            if (findUser.password != password) throw new Error("Passsword not Match")
+            if (!comparePassword(password, findUser.password)) throw new Error("Passsword not Match")
             done(null, findUser);
         } catch (e) {
             done(e, null);
