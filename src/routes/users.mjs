@@ -23,9 +23,9 @@ const router = Router();
 router.post('/', checkSchema(createUserSchema), async (req, res) => {
     const result = validationResult(req);
     if (!result.isEmpty()) return res.status(401).send({ error: result.array() });
-    const { body } = req;
-    if (!body) return res.sendStatus(401);
-    const newUser = new User(body);
+    const data = matchedData(req);
+    console.log(data);
+    const newUser = new User(data);
     try {
         const savedUser = await newUser.save();
         return res.status(201).send(savedUser);
