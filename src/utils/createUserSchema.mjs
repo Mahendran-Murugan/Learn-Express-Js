@@ -15,9 +15,14 @@ export const createUserSchema = {
             errorMessage: "Username Can't be Empty",
         },
     },
-    displayname: {
+    displayName: {
         notEmpty: {
             errorMessage: "Displayname Can't be Empty",
+        },
+    },
+    password: {
+        notEmpty: {
+            errorMessage: "Password Can't be Empty",
         },
     },
 }

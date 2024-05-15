@@ -20,7 +20,9 @@ const router = Router();
 //     }
 // )
 
-router.post('/', async (req, res) => {
+router.post('/', checkSchema(createUserSchema), async (req, res) => {
+    const result = validationResult(req);
+    if (!result.isEmpty()) return res.status(401).send({ error: result.array() });
     const { body } = req;
     if (!body) return res.sendStatus(401);
     const newUser = new User(body);
