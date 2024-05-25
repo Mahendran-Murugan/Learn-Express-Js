@@ -48,6 +48,7 @@ router.get('/', query('filter').isString().notEmpty().isLength({ min: 1, max: 10
         if (err) {
             console.log(err);
         } else {
+            console.log("Inside Session Store");
             console.log(data);
         }
     })
