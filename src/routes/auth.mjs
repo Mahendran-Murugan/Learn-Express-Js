@@ -1,10 +1,13 @@
 import { mockUsers } from '../utils/constants.mjs'
 import { Router } from 'express'
 import passport from 'passport';
-import '../strategies/localStrategy.mjs'
+// import '../strategies/localStrategy.mjs'
 import '../strategies/googleStrategy.mjs'
+import googleRouter from './googleAuth.mjs'
 
 const router = Router();
+
+router.use('/google', googleRouter);
 
 router.post('/', (req, res) => {
     const {
@@ -45,10 +48,6 @@ router.post('/pass-logout', (req, res) => {
     })
 })
 
-router.get('/google', passport.authenticate('google'));
 
-router.get('/google/redirect', (req, res) => {
-    res.send({ Working: "Working" })
-});
 
 export default router;
