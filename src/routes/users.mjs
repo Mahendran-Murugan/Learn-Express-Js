@@ -5,6 +5,7 @@ import { mockUsers } from '../utils/constants.mjs'
 import { resolveIndexByUserId } from '../utils/middlewares.mjs'
 import { User } from '../mongoose/shema/user.mjs'
 import { hashPassword } from '../utils/helper.mjs'
+import { getUserByIndexHandler } from '../handlers/userHandlers.mjs'
 
 const router = Router();
 
@@ -69,12 +70,7 @@ router.get('/', query('filter').isString().notEmpty().isLength({ min: 1, max: 10
     // );
 })
 
-router.get('/:id', resolveIndexByUserId, (req, res) => {
-    const { findUserIndex } = req;
-    const findUser = mockUsers[findUserIndex];
-    if (!findUser) return res.sendStatus(404);
-    return res.send(findUser);
-});
+router.get('/:id', resolveIndexByUserId, getUserByIndexHandler);
 
 router.put("/:id", resolveIndexByUserId, (req, res) => {
     const { body, findUserIndex, id } = req;
