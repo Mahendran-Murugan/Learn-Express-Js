@@ -71,7 +71,9 @@ router.get('/', query('filter').isString().notEmpty().isLength({ min: 1, max: 10
 
 router.get('/:id', resolveIndexByUserId, (req, res) => {
     const { findUserIndex } = req;
-    return res.send(mockUsers[findUserIndex]);
+    const findUser = mockUsers[findUserIndex];
+    if (!findUser) return res.sendStatus(404);
+    return res.send(findUser);
 });
 
 router.put("/:id", resolveIndexByUserId, (req, res) => {
