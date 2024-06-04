@@ -15,7 +15,7 @@ const config = {
   // cacheDirectory: "/private/var/folders/7x/6jgcwfvj7wjc00mdlp2kms000000gn/T/jest_dx",
 
   // Automatically clear mock calls, instances, contexts and results before every test
-  clearMocks: true,
+  clearMocks: false,
 
   // Indicates whether the coverage information should be collected while executing the test
   // collectCoverage: false,
