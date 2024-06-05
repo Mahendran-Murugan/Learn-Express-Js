@@ -1,13 +1,13 @@
 import { mockUsers } from '../utils/constants.mjs'
 import { Router } from 'express'
 import passport from 'passport';
-// import '../strategies/localStrategy.mjs'
+import '../strategies/localStrategy.mjs'
 import '../strategies/googleStrategy.mjs'
-import googleRouter from './googleAuth.mjs'
+// import googleRouter from './googleAuth.mjs'
 
 const router = Router();
 
-router.use('/google', googleRouter);
+// router.use('/google', googleRouter);
 
 router.post('/', (req, res) => {
     const {

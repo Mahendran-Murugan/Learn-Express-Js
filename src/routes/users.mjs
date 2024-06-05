@@ -3,9 +3,7 @@ import { checkSchema, validationResult, matchedData, query, cookie } from 'expre
 import { createUserSchema } from '../utils/createUserSchema.mjs'
 import { mockUsers } from '../utils/constants.mjs'
 import { resolveIndexByUserId } from '../utils/middlewares.mjs'
-import { User } from '../mongoose/shema/user.mjs'
-import { hashPassword } from '../utils/helper.mjs'
-import { getUserByIndexHandler } from '../handlers/userHandlers.mjs'
+import { getUserByIndexHandler, postUserHandler } from '../handlers/userHandlers.mjs'
 
 const router = Router();
 
@@ -22,25 +20,7 @@ const router = Router();
 //     }
 // )
 
-router.post('/', checkSchema(createUserSchema), async (req, res) => {
-    const result = validationResult(req);
-    if (!result.isEmpty()) return res.status(401).send({ error: result.array() });
-    const data = matchedData(req);
-    console.log(data);
-    const password = hashPassword(data.password);
-    const newUser = new User({
-        username: data.username,
-        displayName: data.displayName,
-        password: password,
-    });
-    try {
-        const savedUser = await newUser.save();
-        return res.status(201).send(savedUser);
-    } catch (e) {
-        console.log(e);
-        return res.sendStatus(401);
-    }
-})
+router.post('/', checkSchema(createUserSchema), postUserHandler);
 
 router.get('/', query('filter').isString().notEmpty().isLength({ min: 1, max: 10 }).withMessage("Messeage should be in range of 1 to 10"), (req, res) => {
     console.log(req.session);

@@ -9,9 +9,9 @@ passport.serializeUser((user, done) => {
     done(null, user.id);
 })
 
-passport.deserializeUser(async (name, done) => {
+passport.deserializeUser(async (id, done) => {
     console.log("Inside Deserialize local User");
-    console.log(`Deserialize User id: ${name}`);
+    console.log(`Deserialize User id: ${id}`);
     try {
         const findUser = await User.findById(id);
         if (!findUser) throw new Error("User not Found");
@@ -25,8 +25,8 @@ passport.use(
     new Strategy(async (username, password, done) => {
         try {
             const findUser = await User.findOne({ username: username });
-            if (!findUser) throw new Error("User not Found")
-            if (!comparePassword(password, findUser.password)) throw new Error("Passsword not Match")
+            if (!findUser) throw new Error("User not Found");
+            if (!comparePassword(password, findUser.password)) throw new Error("Passsword not Match");
             done(null, findUser);
         } catch (e) {
             done(e, null);
