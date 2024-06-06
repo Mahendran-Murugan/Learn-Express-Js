@@ -14,7 +14,6 @@ export const postUserHandler = async (req, res) => {
     const result = validationResult(req);
     if (!result.isEmpty()) return res.status(401).send({ error: result.array() });
     const data = matchedData(req);
-    console.log(data);
     const password = hashPassword(data.password);
     const newUser = new User({
         username: data.username,
@@ -25,7 +24,6 @@ export const postUserHandler = async (req, res) => {
         const savedUser = await newUser.save();
         return res.status(201).send(savedUser);
     } catch (e) {
-        console.log(e);
         return res.sendStatus(401);
     }
 }

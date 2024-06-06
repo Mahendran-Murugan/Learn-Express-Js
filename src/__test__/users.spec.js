@@ -1,5 +1,13 @@
-import { getUserByIndexHandler } from '../handlers/userHandlers.mjs'
+import { getUserByIndexHandler, postUserHandler } from '../handlers/userHandlers.mjs'
 import { mockUsers } from '../utils/constants.mjs';
+
+jest.mock('express-validator', () => ({
+    validationResult: jest.fn(() => ({
+        isEmpty: jest.fn(() => false),
+        array: jest.fn(() => [{ msg: "invalid" }])
+    })),
+    matchedData: jest.fn(),
+}))
 
 const mockReq = {
     findUserIndex: 1,
@@ -8,6 +16,7 @@ const mockReq = {
 const mockRes = {
     send: jest.fn(),
     sendStatus: jest.fn(),
+    status: jest.fn(() => mockRes),
 }
 
 describe('get users', () => {
@@ -30,4 +39,11 @@ describe('get users', () => {
         expect(mockRes.sendStatus).toHaveBeenCalledTimes(1);
         expect(mockRes.send).not.toHaveBeenCalled();
     });
+});
+
+describe("post users", () => {
+    const mockReq = {};
+    it('for 404 status', async () => {
+        await postUserHandler(mockReq, mockRes);
+    })
 });
